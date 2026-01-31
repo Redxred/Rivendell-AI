@@ -35,6 +35,11 @@
   --accent: 41 53% 54%;
   --accent-foreground: 201 36% 9%;
   
+  /* Rich Gold Palette */
+  --gold: 41 73% 55%;
+  --gold-light: 43 78% 65%;
+  --gold-dark: 38 65% 42%;
+  
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
 
@@ -51,7 +56,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    @apply bg-background text-foreground antialiased selection:bg-accent/30 selection:text-accent;
     font-family: var(--font-sans);
   }
   
@@ -69,6 +74,112 @@
   .glass-panel {
     @apply bg-card/40 backdrop-blur-md border border-white/5;
   }
+  
+  /* Golden Gradient Text */
+  .text-gold-gradient {
+    @apply text-transparent bg-clip-text;
+    background-image: linear-gradient(135deg, hsl(var(--gold-light)), hsl(var(--gold)), hsl(var(--gold-dark)));
+  }
+  
+  /* Golden Glow Effects */
+  .glow-gold {
+    box-shadow: 0 0 20px hsl(var(--gold) / 0.3), 
+                0 0 40px hsl(var(--gold) / 0.2),
+                0 0 60px hsl(var(--gold) / 0.1);
+  }
+  
+  .glow-gold-sm {
+    box-shadow: 0 0 10px hsl(var(--gold) / 0.2), 
+                0 0 20px hsl(var(--gold) / 0.1);
+  }
+  
+  .glow-gold-text {
+    text-shadow: 0 0 10px hsl(var(--gold) / 0.5), 
+                 0 0 20px hsl(var(--gold) / 0.3);
+  }
+  
+  /* Golden Border */
+  .border-gold-gradient {
+    border-image: linear-gradient(135deg, hsl(var(--gold-light)), hsl(var(--gold)), hsl(var(--gold-dark))) 1;
+  }
+  
+  /* Shimmer Animation */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--gold) / 0.1),
+      hsl(var(--gold) / 0.3),
+      hsl(var(--gold) / 0.1),
+      transparent
+    );
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  /* Floating Animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Pulse Glow */
+  .pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 15px hsl(var(--gold) / 0.2); 
+    }
+    50% { 
+      box-shadow: 0 0 30px hsl(var(--gold) / 0.4), 0 0 60px hsl(var(--gold) / 0.2); 
+    }
+  }
+  
+  /* Rotate Animation */
+  .rotate-slow {
+    animation: rotate-slow 30s linear infinite;
+  }
+  
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Golden particles effect */
+  .gold-particles {
+    background-image: radial-gradient(circle at 20% 80%, hsl(var(--gold) / 0.15) 1px, transparent 1px),
+                      radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.15) 1px, transparent 1px),
+                      radial-gradient(circle at 40% 40%, hsl(var(--gold) / 0.1) 1px, transparent 1px),
+                      radial-gradient(circle at 60% 60%, hsl(var(--gold) / 0.1) 1px, transparent 1px);
+    background-size: 100px 100px, 150px 150px, 80px 80px, 120px 120px;
+    animation: particle-float 20s linear infinite;
+  }
+  
+  @keyframes particle-float {
+    0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+    100% { background-position: 100px 100px, -150px 150px, 80px -80px, -120px 120px; }
+  }
 }
 
 /* Custom Scrollbar */
@@ -83,5 +194,5 @@
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
+  background: hsl(var(--gold) / 0.5);
 }

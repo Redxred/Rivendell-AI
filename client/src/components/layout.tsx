@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -25,25 +25,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <div className="min-h-screen bg-background text-foreground selection:bg-[hsl(var(--gold)/0.3)] selection:text-[hsl(var(--gold))]">
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out border-b border-transparent",
-          isScrolled ? "bg-background/80 backdrop-blur-md border-border/50 py-4" : "bg-transparent py-6"
+          isScrolled ? "bg-background/80 backdrop-blur-md border-[hsl(var(--gold)/0.1)] py-4" : "bg-transparent py-6"
         )}
       >
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-3 z-50">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-colors">
-              <div className="w-3 h-3 rotate-45 bg-primary rounded-sm group-hover:scale-110 transition-transform duration-300" />
-            </div>
-            <span className="font-serif text-xl font-medium tracking-tight text-foreground">
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: 45 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(var(--gold)/0.2)] to-[hsl(var(--gold)/0.05)] flex items-center justify-center border border-[hsl(var(--gold)/0.3)] group-hover:glow-gold-sm transition-all duration-300"
+            >
+              <Star className="w-4 h-4 text-[hsl(var(--gold))]" fill="hsl(var(--gold))" />
+            </motion.div>
+            <span className="font-serif text-xl font-medium tracking-tight text-foreground group-hover:text-gold-gradient transition-all">
               Rivendell AI
             </span>
           </Link>
@@ -55,21 +58,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary relative group",
-                  location === link.href ? "text-primary" : "text-muted-foreground"
+                  "text-sm font-medium transition-colors hover:text-[hsl(var(--gold))] relative group",
+                  location === link.href ? "text-[hsl(var(--gold))]" : "text-muted-foreground"
                 )}
               >
                 {link.label}
                 <span className={cn(
-                  "absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full",
+                  "absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] transition-all duration-300 group-hover:w-full",
                   location === link.href ? "w-full" : ""
                 )} />
               </Link>
             ))}
             <Link href="/contact" className="ml-4">
-              <button className="px-5 py-2.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium border border-primary/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[hsl(var(--gold-dark))] to-[hsl(var(--gold))] text-background text-sm font-semibold transition-all hover:glow-gold-sm flex items-center gap-2"
+              >
                 Begin Journey <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </Link>
           </nav>
 
@@ -92,23 +99,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
             exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 z-40 bg-background pt-24 px-6 md:hidden flex flex-col gap-6"
           >
-            {NAV_LINKS.map((link) => (
-              <Link
+            {NAV_LINKS.map((link, i) => (
+              <motion.div
                 key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-3xl font-serif font-medium",
-                  location === link.href ? "text-primary" : "text-muted-foreground"
-                )}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
               >
-                {link.label}
-              </Link>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    "text-3xl font-serif font-medium block",
+                    location === link.href ? "text-gold-gradient" : "text-muted-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </motion.div>
             ))}
-            <Link href="/contact" className="mt-8">
-              <button className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-lg">
-                Begin Journey
-              </button>
-            </Link>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Link href="/contact" className="mt-8 block">
+                <button className="w-full py-4 rounded-xl bg-gradient-to-r from-[hsl(var(--gold-dark))] via-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-background font-semibold text-lg glow-gold">
+                  Begin Journey
+                </button>
+              </Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -116,49 +135,68 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <main className="pt-24 min-h-screen relative overflow-hidden">
         {/* Ambient background effects */}
         <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
-          <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
+          <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[hsl(var(--gold)/0.03)] rounded-full blur-[120px]" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px]" />
+          <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px]" />
         </div>
         {children}
       </main>
 
-      <footer className="border-t border-border/40 py-16 bg-background relative z-10">
-        <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="space-y-4">
-            <span className="font-serif text-xl font-bold text-foreground block">Rivendell AI</span>
-            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-              Where elven serenity meets modern technological precision. Crafting digital sanctuaries for the future.
-            </p>
-          </div>
+      <footer className="border-t border-[hsl(var(--gold)/0.1)] py-16 bg-background relative z-10">
+        <div className="container mx-auto px-4 md:px-6">
+          {/* Golden line accent */}
+          <div className="w-24 h-0.5 bg-gradient-to-r from-[hsl(var(--gold))] to-transparent mb-12" />
           
-          <div>
-            <h4 className="font-medium mb-6 text-foreground">Sanctuary</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="/about" className="hover:text-primary transition-colors">Lore</Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors">Join the Council</Link></li>
-            </ul>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-[hsl(var(--gold))]" fill="hsl(var(--gold))" />
+                <span className="font-serif text-xl font-bold text-gold-gradient">Rivendell AI</span>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
+                Where elven serenity meets modern technological precision. Crafting digital sanctuaries for the future.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-medium mb-6 text-foreground flex items-center gap-2">
+                <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full" />
+                Sanctuary
+              </h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/" className="hover:text-[hsl(var(--gold))] transition-colors">Home</Link></li>
+                <li><Link href="/about" className="hover:text-[hsl(var(--gold))] transition-colors">Lore</Link></li>
+                <li><Link href="/careers" className="hover:text-[hsl(var(--gold))] transition-colors">Join the Council</Link></li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 className="font-medium mb-6 text-foreground">Craft</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><Link href="/services" className="hover:text-primary transition-colors">Services</Link></li>
-              <li><Link href="/process" className="hover:text-primary transition-colors">Methodology</Link></li>
-              <li><Link href="/pricing" className="hover:text-primary transition-colors">Tribute</Link></li>
-            </ul>
-          </div>
+            <div>
+              <h4 className="font-medium mb-6 text-foreground flex items-center gap-2">
+                <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full" />
+                Craft
+              </h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/services" className="hover:text-[hsl(var(--gold))] transition-colors">Services</Link></li>
+                <li><Link href="/process" className="hover:text-[hsl(var(--gold))] transition-colors">Methodology</Link></li>
+                <li><Link href="/pricing" className="hover:text-[hsl(var(--gold))] transition-colors">Tribute</Link></li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 className="font-medium mb-6 text-foreground">Contact</h4>
-            <p className="text-sm text-muted-foreground mb-4">San Francisco & Remote</p>
-            <Link href="/contact" className="text-primary text-sm hover:underline">
-              council@rivendell.ai
-            </Link>
+            <div>
+              <h4 className="font-medium mb-6 text-foreground flex items-center gap-2">
+                <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full" />
+                Contact
+              </h4>
+              <p className="text-sm text-muted-foreground mb-4">San Francisco & Remote</p>
+              <Link href="/contact" className="text-[hsl(var(--gold))] text-sm hover:underline">
+                council@rivendell.ai
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="container mx-auto px-4 md:px-6 mt-16 pt-8 border-t border-border/40 text-center md:text-left text-xs text-muted-foreground/60">
-          © {new Date().getFullYear()} Rivendell AI. All rights reserved.
+          <div className="mt-16 pt-8 border-t border-[hsl(var(--gold)/0.1)] flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground/60">
+            <span>© {new Date().getFullYear()} Rivendell AI. All rights reserved.</span>
+            <span className="text-gold-gradient font-medium italic">"True power lies not in speed, but in wisdom."</span>
+          </div>
         </div>
       </footer>
     </div>

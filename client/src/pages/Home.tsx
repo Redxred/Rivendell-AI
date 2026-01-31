@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Code, Brain, Sparkles, Layers } from "lucide-react";
+import { ArrowRight, Code, Brain, Sparkles, Layers, Star, Zap } from "lucide-react";
 import { Link } from "wouter";
 
 const FADE_UP = {
@@ -7,29 +7,75 @@ const FADE_UP = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
 };
 
+const FADE_IN = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 1, ease: "easeOut" } }
+};
+
+const SCALE_IN = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+};
+
 const STAGGER = {
-  visible: { transition: { staggerChildren: 0.1 } }
+  visible: { transition: { staggerChildren: 0.15 } }
+};
+
+const STAGGER_FAST = {
+  visible: { transition: { staggerChildren: 0.08 } }
 };
 
 export default function Home() {
   return (
     <div className="space-y-32 pb-24">
       {/* Hero Section */}
-      <section className="container mx-auto px-4 md:px-6 min-h-[80vh] flex items-center pt-10">
+      <section className="container mx-auto px-4 md:px-6 min-h-[85vh] flex items-center pt-10 relative">
+        {/* Golden Ambient Orbs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+            className="absolute top-20 right-[10%] w-96 h-96 bg-[hsl(var(--gold)/0.08)] rounded-full blur-[100px] float"
+          />
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2, delay: 0.5 }}
+            className="absolute bottom-20 left-[5%] w-64 h-64 bg-[hsl(var(--gold)/0.05)] rounded-full blur-[80px]"
+            style={{ animation: "float 8s ease-in-out infinite reverse" }}
+          />
+        </div>
+        
         <motion.div 
           initial="hidden"
           animate="visible"
           variants={STAGGER}
-          className="max-w-4xl space-y-8"
+          className="max-w-4xl space-y-8 relative z-10"
         >
-          <motion.div variants={FADE_UP} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium tracking-wide uppercase">
-            <Sparkles className="w-3 h-3" />
-            <span>The New Era of Intelligence</span>
+          <motion.div 
+            variants={FADE_UP} 
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.08)] text-xs font-medium tracking-wide uppercase shimmer"
+          >
+            <Star className="w-3 h-3 text-[hsl(var(--gold))]" fill="hsl(var(--gold))" />
+            <span className="text-gold-gradient font-semibold">The New Era of Intelligence</span>
           </motion.div>
           
           <motion.h1 variants={FADE_UP} className="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-[1.1] text-balance">
             Sanctuary for <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Smart Technology</span>
+            <motion.span 
+              className="text-gold-gradient glow-gold-text inline-block"
+              animate={{ 
+                textShadow: [
+                  "0 0 10px hsl(var(--gold) / 0.3)",
+                  "0 0 20px hsl(var(--gold) / 0.5)",
+                  "0 0 10px hsl(var(--gold) / 0.3)"
+                ]
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              Smart Technology
+            </motion.span>
           </motion.h1>
           
           <motion.p variants={FADE_UP} className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
@@ -39,14 +85,23 @@ export default function Home() {
           
           <motion.div variants={FADE_UP} className="flex flex-col sm:flex-row gap-4 pt-4">
             <Link href="/contact">
-              <button className="px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all hover:-translate-y-1">
+              <motion.button 
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-4 rounded-xl bg-gradient-to-r from-[hsl(var(--gold-dark))] via-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-background font-semibold text-lg shadow-lg glow-gold hover:glow-gold transition-all duration-300"
+              >
                 Enter the Council
-              </button>
+              </motion.button>
             </Link>
             <Link href="/services">
-              <button className="px-8 py-4 rounded-xl bg-card border border-border text-foreground font-medium text-lg hover:border-primary/50 transition-all">
+              <motion.button 
+                whileHover={{ scale: 1.02, borderColor: "hsl(var(--gold) / 0.5)" }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-4 rounded-xl bg-card border border-border text-foreground font-medium text-lg transition-all duration-300 flex items-center gap-2 group"
+              >
                 Explore Our Craft
-              </button>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
             </Link>
           </motion.div>
         </motion.div>
@@ -55,92 +110,243 @@ export default function Home() {
       {/* Philosophy Section */}
       <section className="container mx-auto px-4 md:px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden bg-card border border-white/5 group">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50" />
-            {/* Abstract nature/tech representation - CSS generated */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={SCALE_IN}
+            className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden bg-card border border-[hsl(var(--gold)/0.1)] group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--gold)/0.1)] to-transparent opacity-50" />
+            <div className="absolute inset-0 gold-particles" />
+            {/* Orbital Rings */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-64 h-64 border border-primary/20 rounded-full animate-[spin_20s_linear_infinite]" />
-              <div className="absolute w-48 h-48 border border-accent/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-              <div className="absolute w-32 h-32 bg-primary/5 backdrop-blur-3xl rounded-full" />
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="w-72 h-72 border border-[hsl(var(--gold)/0.2)] rounded-full"
+              />
+              <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute w-56 h-56 border border-primary/20 rounded-full"
+              />
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute w-40 h-40 border border-[hsl(var(--gold)/0.3)] rounded-full"
+              />
+              {/* Central Glowing Orb */}
+              <motion.div 
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px hsl(var(--gold) / 0.3), 0 0 40px hsl(var(--gold) / 0.1)",
+                    "0 0 40px hsl(var(--gold) / 0.5), 0 0 80px hsl(var(--gold) / 0.2)",
+                    "0 0 20px hsl(var(--gold) / 0.3), 0 0 40px hsl(var(--gold) / 0.1)"
+                  ]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute w-24 h-24 bg-gradient-to-br from-[hsl(var(--gold-light))] to-[hsl(var(--gold-dark))] rounded-full"
+              />
+              {/* Orbiting Dots */}
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute w-72 h-72"
+              >
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-[hsl(var(--gold))] rounded-full glow-gold-sm" />
+              </motion.div>
+              <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                className="absolute w-56 h-56"
+              >
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full" />
+              </motion.div>
             </div>
-            {/* Descriptive comment for Unsplash fallback if needed */}
-            {/* <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80" alt="Abstract connection network" className="w-full h-full object-cover opacity-40 mix-blend-overlay" /> */}
-          </div>
+          </motion.div>
           
-          <div className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-serif">The Rivendell Way</h2>
-            <div className="space-y-6">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={STAGGER}
+            className="space-y-8"
+          >
+            <motion.h2 variants={FADE_UP} className="text-4xl md:text-5xl font-serif">
+              The <span className="text-gold-gradient">Rivendell</span> Way
+            </motion.h2>
+            <motion.div variants={STAGGER_FAST} className="space-y-6">
               {[
-                { title: "Listen", desc: "We begin with silence. Understanding your core needs before writing a single line of code." },
-                { title: "Design", desc: "Crafting interfaces that breathe. We prioritize serenity and clarity over noise." },
-                { title: "Build", desc: "Forging robust architectures with the strength of mithril and the flexibility of willow." },
-                { title: "Support", desc: "An eternal alliance. We stand by our creations as they grow and evolve." }
+                { title: "Listen", desc: "We begin with silence. Understanding your core needs before writing a single line of code.", icon: "01" },
+                { title: "Design", desc: "Crafting interfaces that breathe. We prioritize serenity and clarity over noise.", icon: "02" },
+                { title: "Build", desc: "Forging robust architectures with the strength of mithril and the flexibility of willow.", icon: "03" },
+                { title: "Support", desc: "An eternal alliance. We stand by our creations as they grow and evolve.", icon: "04" }
               ].map((item, i) => (
-                <div key={i} className="flex gap-4 group cursor-default">
-                  <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center shrink-0 group-hover:border-primary/50 group-hover:bg-primary/5 transition-colors">
-                    <span className="font-serif text-lg text-muted-foreground group-hover:text-primary transition-colors">{i + 1}</span>
-                  </div>
+                <motion.div 
+                  key={i} 
+                  variants={FADE_UP}
+                  whileHover={{ x: 8 }}
+                  className="flex gap-4 group cursor-default"
+                >
+                  <motion.div 
+                    whileHover={{ scale: 1.1, borderColor: "hsl(var(--gold))" }}
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 group-hover:border-[hsl(var(--gold)/0.5)] group-hover:bg-[hsl(var(--gold)/0.05)]"
+                  >
+                    <span className="font-serif text-sm text-muted-foreground group-hover:text-[hsl(var(--gold))] transition-colors">{item.icon}</span>
+                  </motion.div>
                   <div>
-                    <h3 className="text-xl font-medium mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                    <h3 className="text-xl font-medium mb-1 group-hover:text-[hsl(var(--gold))] transition-colors">{item.title}</h3>
                     <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="container mx-auto px-4 md:px-6 bg-card/30 rounded-3xl p-8 md:p-16 border border-white/5">
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-serif">Our Craft</h2>
-          <p className="text-muted-foreground text-lg">
-            We weave advanced technology into seamless experiences.
-          </p>
-        </div>
+      <section className="container mx-auto px-4 md:px-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={FADE_IN}
+          className="relative rounded-3xl overflow-hidden bg-card/30 p-8 md:p-16 border border-[hsl(var(--gold)/0.1)]"
+        >
+          {/* Golden accent line */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent" />
+          
+          <motion.div variants={STAGGER} className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+            <motion.div variants={FADE_UP} className="flex justify-center mb-4">
+              <Zap className="w-8 h-8 text-[hsl(var(--gold))]" />
+            </motion.div>
+            <motion.h2 variants={FADE_UP} className="text-4xl md:text-5xl font-serif">
+              Our <span className="text-gold-gradient">Craft</span>
+            </motion.h2>
+            <motion.p variants={FADE_UP} className="text-muted-foreground text-lg">
+              We weave advanced technology into seamless experiences.
+            </motion.p>
+          </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+          <motion.div 
+            variants={STAGGER}
+            className="grid md:grid-cols-3 gap-8"
+          >
+            {[
+              { icon: Code, title: "Web & App Dev", desc: "Performant, accessible, and beautiful applications built with modern stacks." },
+              { icon: Brain, title: "AI Automation", desc: "Intelligent workflows that reclaim your time and augment your capabilities." },
+              { icon: Layers, title: "UI/UX Design", desc: "Interfaces that feel inevitable. Intuitive flows designed for human cognition." },
+            ].map((service, i) => (
+              <motion.div 
+                key={i}
+                variants={SCALE_IN}
+                whileHover={{ y: -8, borderColor: "hsl(var(--gold) / 0.4)" }}
+                className="p-8 rounded-2xl bg-background border border-border hover:shadow-lg hover:shadow-[hsl(var(--gold)/0.1)] transition-all duration-500 group relative overflow-hidden"
+              >
+                {/* Shimmer effect on hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 shimmer" />
+                
+                <motion.div 
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-[hsl(var(--gold)/0.2)] to-[hsl(var(--gold)/0.05)] flex items-center justify-center mb-6 text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.2)]"
+                >
+                  <service.icon strokeWidth={1.5} className="w-6 h-6" />
+                </motion.div>
+                <h3 className="text-xl font-medium mb-3 font-serif group-hover:text-[hsl(var(--gold))] transition-colors">{service.title}</h3>
+                <p className="text-muted-foreground leading-relaxed mb-6">{service.desc}</p>
+                <Link href="/services" className="inline-flex items-center text-sm font-medium text-[hsl(var(--gold))] hover:underline gap-1 group/link">
+                  Learn more 
+                  <ArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="container mx-auto px-4 md:px-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={STAGGER}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+        >
           {[
-            { icon: Code, title: "Web & App Dev", desc: "Performant, accessible, and beautiful applications built with modern stacks." },
-            { icon: Brain, title: "AI Automation", desc: "Intelligent workflows that reclaim your time and augment your capabilities." },
-            { icon: Layers, title: "UI/UX Design", desc: "Interfaces that feel inevitable. Intuitive flows designed for human cognition." },
-          ].map((service, i) => (
+            { value: "50+", label: "Projects Delivered" },
+            { value: "98%", label: "Client Satisfaction" },
+            { value: "5+", label: "Years of Excellence" },
+            { value: "24/7", label: "Support Available" }
+          ].map((stat, i) => (
             <motion.div 
               key={i}
-              whileHover={{ y: -5 }}
-              className="p-8 rounded-2xl bg-background border border-border hover:border-primary/30 transition-all group"
+              variants={FADE_UP}
+              className="text-center group"
             >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-500">
-                <service.icon strokeWidth={1.5} />
-              </div>
-              <h3 className="text-xl font-medium mb-3 font-serif">{service.title}</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">{service.desc}</p>
-              <Link href="/services" className="inline-flex items-center text-sm font-medium text-primary hover:underline gap-1">
-                Learn more <ArrowRight className="w-3 h-3" />
-              </Link>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="text-4xl md:text-5xl font-serif text-gold-gradient glow-gold-text mb-2"
+              >
+                {stat.value}
+              </motion.div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* CTA */}
       <section className="container mx-auto px-4 md:px-6">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-background to-secondary/20 border border-white/10 p-12 md:p-24 text-center">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={SCALE_IN}
+          className="relative rounded-3xl overflow-hidden border border-[hsl(var(--gold)/0.2)] p-12 md:p-24 text-center"
+        >
+          {/* Golden gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--gold)/0.1)] via-background to-[hsl(var(--gold)/0.05)]" />
+          <div className="absolute inset-0 gold-particles opacity-50" />
+          
+          {/* Decorative corner accents */}
+          <div className="absolute top-6 left-6 w-16 h-16 border-l-2 border-t-2 border-[hsl(var(--gold)/0.3)] rounded-tl-xl" />
+          <div className="absolute top-6 right-6 w-16 h-16 border-r-2 border-t-2 border-[hsl(var(--gold)/0.3)] rounded-tr-xl" />
+          <div className="absolute bottom-6 left-6 w-16 h-16 border-l-2 border-b-2 border-[hsl(var(--gold)/0.3)] rounded-bl-xl" />
+          <div className="absolute bottom-6 right-6 w-16 h-16 border-r-2 border-b-2 border-[hsl(var(--gold)/0.3)] rounded-br-xl" />
+          
           <div className="relative z-10 space-y-6 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-serif">Ready to begin your journey?</h2>
+            <motion.div
+              animate={{ 
+                rotate: [0, 5, -5, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Star className="w-10 h-10 text-[hsl(var(--gold))] mx-auto mb-4" fill="hsl(var(--gold))" />
+            </motion.div>
+            <h2 className="text-4xl md:text-6xl font-serif">
+              Ready to begin your <span className="text-gold-gradient">journey</span>?
+            </h2>
             <p className="text-xl text-muted-foreground">
               The Council is gathered. We await your challenge.
             </p>
             <div className="pt-8">
               <Link href="/contact">
-                <button className="px-10 py-5 rounded-xl bg-foreground text-background font-bold text-lg hover:scale-105 transition-transform">
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-10 py-5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold-dark))] via-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-background font-bold text-lg glow-gold hover:shadow-2xl transition-all duration-300"
+                >
                   Request a Council Session
-                </button>
+                </motion.button>
               </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
