@@ -1,8 +1,9 @@
 import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, Star } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logoImage from "@assets/logo_(1)_1769947446649.png";
 
 const NAV_LINKS = [
   { href: "/", label: "Sanctuary" },
@@ -41,11 +42,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-3 z-50">
             <motion.div 
-              whileHover={{ scale: 1.1, rotate: 45 }}
+              whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(var(--gold)/0.2)] to-[hsl(var(--gold)/0.05)] flex items-center justify-center border border-[hsl(var(--gold)/0.3)] group-hover:glow-gold-sm transition-all duration-300"
+              className="w-12 h-12 flex items-center justify-center group-hover:glow-gold-sm transition-all duration-300"
             >
-              <Star className="w-4 h-4 text-[hsl(var(--gold))]" fill="hsl(var(--gold))" />
+              <img src={logoImage} alt="Rivendell AI" className="w-full h-full object-contain" />
             </motion.div>
             <span className="font-serif text-xl font-medium tracking-tight text-foreground group-hover:text-gold-gradient transition-all">
               Rivendell AI
@@ -151,7 +152,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-[hsl(var(--gold))]" fill="hsl(var(--gold))" />
+                <img src={logoImage} alt="Rivendell AI" className="w-8 h-8 object-contain" />
                 <span className="font-serif text-xl font-bold text-gold-gradient">Rivendell AI</span>
               </div>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
