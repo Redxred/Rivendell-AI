@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import logoImage from "@assets/logo_(1)_1769947446649.png";
+import logoImage from "@assets/logo_(2)_1770018915716.png";
 
 const NAV_LINKS = [
   { href: "/", label: "Sanctuary" },
